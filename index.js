@@ -6,9 +6,19 @@ const app = express();
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get('/mobi', (req, res) => {
-  
-  res.json({test: 2});
+app.get('/mobi', async (req, res) => {
+  let kindlegen;
+  try {
+    kindlegen = await spawn(path.resolve('./src/kindlegen'), [path.resolve('./src/test.epub'), '-verbose', '-o', 'output.mobi']);
+    
+    kindlegen.on('close', (code) => {
+      res.send(path.resolve('./src/output.mobi'));
+      console.log(`child process exited with code ${code}`);
+    });
+
+  } catch (e) {
+    console.log(e);
+  }
 
 });
 
