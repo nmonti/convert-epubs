@@ -1,17 +1,18 @@
 const express = require('express');
 const path = require('path');
+const { spawn } = require('child_process'); 
 
 const app = express();
 
-// Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get('/mobi', async (req, res) => {
+app.get('/convert', async (req, res) => {
   let kindlegen;
   try {
-    kindlegen = await spawn(path.resolve('./kindlegen'), [path.resolve('./test.epub'), '-verbose', '-o', 'output.mobi']);
+    kindlegen = await spawn(path.resolve('./kindlegen.exe'), [path.resolve('./test.epub'), '-verbose', '-o', 'output.mobi']);
     
     kindlegen.on('close', (code) => {
+      console.log(path.resolve('./output.mobi'))
       res.send(path.resolve('./output.mobi'));
       console.log(`child process exited with code ${code}`);
     });
@@ -22,8 +23,10 @@ app.get('/mobi', async (req, res) => {
 
 });
 
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
+app.get('/mobi', (req, res) => {
+  res.download(path.resolve('./output.mobi'));
+})
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
