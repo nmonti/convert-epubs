@@ -9,10 +9,10 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('/mobi', async (req, res) => {
   let kindlegen;
   try {
-    kindlegen = await spawn(path.resolve('./src/kindlegen'), [path.resolve('./src/test.epub'), '-verbose', '-o', 'output.mobi']);
+    kindlegen = await spawn(path.resolve('./kindlegen'), [path.resolve('./test.epub'), '-verbose', '-o', 'output.mobi']);
     
     kindlegen.on('close', (code) => {
-      res.send(path.resolve('./src/output.mobi'));
+      res.send(path.resolve('./output.mobi'));
       console.log(`child process exited with code ${code}`);
     });
 
