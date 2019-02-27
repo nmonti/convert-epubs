@@ -9,16 +9,19 @@ class App extends Component {
     this.setState({showDownload: true});
   }
 
+  getDownloadLink = () => {
+    return this.state.showDownload 
+           ? 
+           <a href="/output.mobi" download>Click to download</a> 
+           :
+           <p>convert</p>;
+  }
+
   render() {
-    const downloadLink = this.state.showDownload 
-                         ? 
-                         <a href="/output.mobi" download>Click to download</a> 
-                         :
-                         <p>convert</p>;
     return (
       <div className="App" onClick={this.getMobi}>
 
-        {downloadLink}
+        {this.getDownloadLink()}
       </div>
     );
   }
