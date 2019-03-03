@@ -9,7 +9,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.get('/convert', async (req, res) => {
   let kindlegen;
   try {
-    kindlegen = await spawn(path.resolve('./kindlegenu'), [path.resolve('./test.epub'), '-verbose', '-o', 'output.mobi']);
+    kindlegen = await spawn('./kindlegenu', ['./test.epub', '-verbose', '-o', 'output.mobi']);
     
     kindlegen.on('close', (code) => {
       console.log(path.resolve('./output.mobi'))
@@ -18,7 +18,7 @@ app.get('/convert', async (req, res) => {
     });
 
   } catch (e) {
-    console.log(e);
+    console.log(e); 
   }
 
 });
